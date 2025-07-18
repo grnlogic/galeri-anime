@@ -24,9 +24,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Ganti anotasi menjadi @Enumerated
-@Enumerated(EnumType.STRING)
-private Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -34,12 +33,33 @@ private Role role;
     @Column(nullable = false)
     private String password;
 
-
-      @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security akan membaca peran dari sini
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -59,5 +79,4 @@ private Role role;
     public boolean isEnabled() {
         return true;
     }
-    
 }
